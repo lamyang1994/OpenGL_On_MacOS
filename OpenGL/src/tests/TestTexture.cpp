@@ -41,7 +41,7 @@ namespace test {
         m_IBO = std::make_unique<IndexBuffer>(indices, 6);
 
         m_Shader = std::make_unique<Shader>("../OpenGL/res/shader/BasicShader.glsl");
-        m_Texture_A = std::make_unique<Texture>("../OpenGL/res/textures/romantic.jpeg");
+        m_Texture_A = std::make_unique<Texture>("../OpenGL/res/textures/dota2_logo.png");
         m_Texture_B = std::make_unique<Texture>("../OpenGL/res/textures/wood.png");
 
         m_Renderer = std::make_unique<Renderer>();
@@ -164,7 +164,7 @@ namespace test {
         m_IBO = std::make_unique<IndexBuffer>(indices, 36);
 
         m_Shader = std::make_unique<Shader>("../OpenGL/res/shader/BasicShader.glsl");
-        m_Texture_A = std::make_unique<Texture>("../OpenGL/res/textures/romantic.jpeg");
+        m_Texture_A = std::make_unique<Texture>("../OpenGL/res/textures/dota2_logo.png");
         m_Texture_B = std::make_unique<Texture>("../OpenGL/res/textures/wood.png");
 
         m_Renderer = std::make_unique<Renderer>();

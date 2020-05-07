@@ -8,7 +8,7 @@ PROJECT (myOpenGL)
 message(STATUS, "ENV{CXXFLAGS}, $ENV{CXXFLAGS}")
 SET(CMAKE_BUILD_TYPE "Debug")
 SET(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -std=c++17 -framework Cocoa -framework OpenGL -framework IOKit")
-SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -Wall -O0 -g -ggdb ")
 SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 # add_definitions("-DGLFW_INCLUDE_GLCOREARB")
