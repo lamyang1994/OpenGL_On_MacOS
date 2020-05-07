@@ -7,8 +7,7 @@ TheCherno's Tutorial videos : https://www.youtube.com/watch?v=W3gAzLwfIP0&list=P
 ## Usage
 
 - Compile files, requires **cmake**
-
-```shell
+```Shell
 mkdir build && cd build
 cmake
 make 
