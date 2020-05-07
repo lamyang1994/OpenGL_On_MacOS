@@ -8,6 +8,7 @@ TheCherno's Tutorial videos : https://www.youtube.com/watch?v=W3gAzLwfIP0&list=P
 
 - Compile files, requires **cmake**
 
+```Shell
 mkdir build && cd build
 cmake
 make 
