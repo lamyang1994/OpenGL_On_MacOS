@@ -1,4 +1,4 @@
-# OpenGL_In_MacOS
+# OpenGL_On_MacOS
 
 LearnOpenGL : https://learnopengl.com/
 
