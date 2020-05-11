@@ -22,6 +22,8 @@ cd Debug
 ```
 
 - Go, Select the Modules
-
+menu:
 ![Menu](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/Menu.jpg)
+
+test of lights:
 ![Lights](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/TestLights.jpg)
