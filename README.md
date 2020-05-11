@@ -17,7 +17,7 @@ make
 - Execute
 
 ```Shell
-cd ../Debug
+cd Debug
 ./bin/App.o
 ```
 
