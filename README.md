@@ -23,10 +23,4 @@ cd Debug
 
 - Go, Select the Modules
 
-menu:
-
-<img src="https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/Menu.jpg" width = "480" height = "360" alt="Menu" align=center />
-
-test of lights:
-
-<img src="https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/TestLights.jpg" width = "480" height = "360" alt="Menu" align=center />
+<iframe height=498 width=510 src="https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/demo.mp4" frameborder=0 allowfullscreen></iframe>
