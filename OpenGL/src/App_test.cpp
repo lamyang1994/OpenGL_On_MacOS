@@ -23,6 +23,7 @@
 #include "tests/TestClearColor.h"
 #include "tests/TestTexture.h"
 #include "tests/TestCamera.h"
+#include "tests/TestLight.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, width, height);
@@ -84,6 +85,7 @@ int main(void)
     testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
     testMenu->RegisterTest<test::TestTexture3D>("3D Texture");
     testMenu->RegisterTest<test::TestCamera>("Camera", window);
+    testMenu->RegisterTest<test::TestLight>("Light");
 
     float deltaTime = 0.0f;
     float lastTime  = 0.0f;

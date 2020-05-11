@@ -1,15 +1,7 @@
 #pragma once
 
-#include "VertexBuffer.h"
-#include "IndexBuffer.h"
-#include "VertexArray.h"
-#include "Shader.h"
-#include "Texture.h"
 #include "Test.h" 
 #include "Camera.h"
-
-#include <memory>
-#include <vector>
 
 namespace test {
  
