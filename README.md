@@ -23,4 +23,4 @@ cd Debug
 
 - Go, Select the Modules
 
-<iframe height=498 width=510 src="https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/demo.gif" frameborder=0 allowfullscreen></iframe>
+<image height=498 width=510 src="https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/demo.gif"><\image>
