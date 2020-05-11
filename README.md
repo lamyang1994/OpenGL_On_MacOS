@@ -21,8 +21,7 @@ cd Debug
 ./bin/App.o
 ```
 
-
-
 - Go, Select the Modules
 
-![Test Menu](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/Example.png)
+![Menu](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/Menu.jpg)
+![Lights](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/TestLights.jpg)

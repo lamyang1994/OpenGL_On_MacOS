@@ -16,10 +16,12 @@ namespace test{
         std::unique_ptr<Shader> m_ObjectShader;
         std::unique_ptr<Renderer> m_Renderer;
 
-        glm::vec3 m_ObjectPos, m_LightPos;
-        glm::vec4 m_ObjectColor, m_LightColor;
+        glm::vec3 m_ObjectPos, m_LightPos, m_CameraPos;
+        glm::vec3 m_ObjectColor, m_LightColor;
 
         glm::mat4 m_Proj, m_View;
+
+        float m_CameraAngle;
         
 
     public:

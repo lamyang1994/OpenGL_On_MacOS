@@ -20,6 +20,7 @@ bool GLLogError(const char* function, const char* file, const int line)
 
 void Renderer::Clear() const 
 {
+    GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
     GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 void Renderer::Clear(const glm::vec4& clear_color) const 
@@ -35,5 +36,5 @@ void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& 
     ib.Bind();
     
     GLCall(glDrawElements(GL_TRIANGLES, ib.getCount(), GL_UNSIGNED_INT, nullptr));
-    // GLCall(glDrawArrays(GL_TRIANGLES, 0, 3));
+    // GLCall(glDrawArrays(GL_TRIANGLES, 0, ib.getCount()));
 }

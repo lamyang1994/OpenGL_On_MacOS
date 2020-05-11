@@ -12,6 +12,8 @@
 #include "Shader.h"
 #include "Texture.h"
 
+#include <GLFW/glfw3.h>
+
 
 namespace test {
     class Test

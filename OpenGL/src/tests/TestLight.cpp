@@ -1,33 +1,92 @@
 #include "TestLight.h"
 
+#include "vendor/imgui/imgui.h"
+#include "vendor/imgui/imgui_impl_opengl3.h"
+#include "vendor/imgui/imgui_impl_glfw.h"
+
 namespace test{
     TestLight::TestLight()
-        :m_ObjectPos(0.0f, 0.0f, -4.0f), m_LightPos(3.6f, 3.0f, -10.0f), m_ObjectColor(1.0f, 0.5f, 0.31f, 1.0f), m_LightColor(1.0f, 1.0f, 1.0f, 1.0f),
-         m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)), m_View(glm::mat4(1.0f))
+        :m_ObjectPos(3.0f, 3.0f, 0.0f), m_LightPos(0.0f, 0.0f, 0.0f), m_CameraPos(0.0f, 0.0f, 1.0f), m_ObjectColor(1.0f, 0.5f, 0.31f), m_LightColor(1.0f, 1.0f, 1.0f),
+         m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)), m_View(glm::mat4(1.0f)), m_CameraAngle(0.0f)
     {
-        float positions[] = {
-             -0.5f, -0.5f,  0.5f,
-              0.5f, -0.5f,  0.5f,
-              0.5f,  0.5f,  0.5f,
-             -0.5f,  0.5f,  0.5f,
+        // float positions[] = {
+        //      -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        //       0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        //       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  0.0f,
+        //      -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 
-             -0.5f, -0.5f, -0.5f,
-              0.5f, -0.5f, -0.5f,
-              0.5f,  0.5f, -0.5f,
-             -0.5f,  0.5f, -0.5f,
+        //      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        //       0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        //       0.5f,  0.5f, -0.5f,  0.0f,  0.0f,  0.0f,
+        //      -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f
+        // };
+
+        // unsigned int indices[] = {
+        //     0, 1, 2,    0, 3, 2,
+        //     1, 5, 6,    1, 2, 6,
+        //     5, 4, 7,    5, 6, 7,
+        //     7, 3, 0,    7, 4, 0,
+        //     3, 2, 6,    3, 7, 6,
+        //     4, 5, 1,    4, 0, 1
+        // };
+
+        float positions[] = {
+             -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
+              0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+              0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+             -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+
+              0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+             -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+              0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+
+             -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+              0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+              0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+
+              0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+             -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+              0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+
+              0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+              0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+              0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+              0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+
+             -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+             -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+             -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+             -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f
         };
 
         unsigned int indices[] = {
-            0, 1, 2,    0, 3, 2,
-            1, 5, 6,    1, 2, 6,
-            4, 5, 6,    4, 7, 6,
-            4, 0, 3,    4, 7, 3,
-            3, 2, 6,    3, 7, 6,
-            0, 1, 5,    0, 4, 5
+            0, 1, 2,
+            0, 3, 2,
+
+            4, 5, 6,
+            4, 7, 6,
+
+            8, 9, 10,
+            8, 11, 10,
+
+            12, 13, 14,
+            12, 15, 14,
+
+            16, 17, 18,
+            16, 19, 18,
+
+            20, 21, 22,
+            20, 23, 22
         };
+
+        GLCall(glEnable(GL_DEPTH_TEST));
 
         m_VBO = std::make_unique<VertexBuffer>(positions, sizeof(positions));
         VertexBufferLayout layout;
+        layout.Push<float>(3);
         layout.Push<float>(3);
 
         m_VAO = std::make_unique<VertexArray>();
@@ -39,7 +98,7 @@ namespace test{
         m_LightShader = std::make_unique<Shader>("../OpenGL/res/shader/LightShader.glsl");
 
         m_Renderer = std::make_unique<Renderer>();
-
+        GLCall(glProvokingVertex(GL_FIRST_VERTEX_CONVENTION));
     }
 
     TestLight::~TestLight()
@@ -54,35 +113,53 @@ namespace test{
     void TestLight::OnRender()
     {
         m_Renderer->Clear();
+
+        // camera 
+        {
+            float camX = glm::sin(glm::radians(m_CameraAngle)) * 10.0f;
+            float camZ = glm::cos(glm::radians(m_CameraAngle)) * 10.0f;
+            m_CameraPos = glm::vec3(camX, 0.0, camZ);
+            m_View = glm::lookAt(m_CameraPos, m_LightPos, glm::vec3(0.0f, 1.0f, 0.0f)); 
+        }
+
         // draw light
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), m_LightPos);
-            model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0.662f, 0.2f, 0.7222f));
+            model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.662f, 0.2f, 0.7222f));
             m_LightShader->Bind();
-            glm::mat4 mvp = m_Proj * m_View * model;
-            m_LightShader->SetUniformMat4f("u_MVP", mvp);
-            m_LightShader->SetUniform4f("u_LightColor", m_LightColor);
+            m_LightShader->SetUniformMat4f("u_MVP", m_Proj * m_View * model);
+            m_LightShader->SetUniform3fv("u_LightColor", m_LightColor);
             m_Renderer->Draw(*m_VAO, *m_IBO, *m_LightShader);
-
         }
         // draw object
         {
             glm::mat4 model = glm::translate(glm::mat4(1.0f), m_ObjectPos);
-            model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0.662f, 0.2f, 0.7222f));
+            model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.662f, 0.2f, 0.7222f));
+            // model = glm::rotate(model, glm::radians(-15.0f), glm::vec3(0.662f, 0.2f, 0.7222f));
 
             m_ObjectShader->Bind();
-            glm::mat4 mvp = m_Proj * m_View * model;
-            m_ObjectShader->SetUniformMat4f("u_MVP", mvp);
-            m_ObjectShader->SetUniform4f("u_LightColor", m_LightColor);
-            m_ObjectShader->SetUniform4f("u_ObjectColor", m_ObjectColor);
+            m_ObjectShader->SetUniformMat4f("u_Proj", m_Proj);
+            m_ObjectShader->SetUniformMat4f("u_View", m_View);
+            m_ObjectShader->SetUniformMat4f("u_Model", model);
+            m_ObjectShader->SetUniformMat3f("u_NormalMatrix", glm::mat3(glm::transpose(glm::inverse(model))));
+
+            m_ObjectShader->SetUniform3fv("u_LightPos", m_LightPos);
+            m_ObjectShader->SetUniform3fv("u_CameraPos", m_CameraPos);
+            m_ObjectShader->SetUniform3fv("u_LightColor", m_LightColor);
+            m_ObjectShader->SetUniform3fv("u_ObjectColor", m_ObjectColor);
             m_Renderer->Draw(*m_VAO, *m_IBO, *m_ObjectShader);
 
         }
+
         
     }
 
     void TestLight::OnImGuiRender()
     {
+        ImGui::SliderFloat("Camera Angle", &m_CameraAngle, 0.0f, 360.0f);
+        ImGui::SliderFloat("ObjectPos.x", &m_ObjectPos.x, -20.0f, 20.0f);
+        ImGui::SliderFloat("ObjectPos.y", &m_ObjectPos.y, -20.0f, 20.0f);
+        ImGui::SliderFloat("ObjectPos.z", &m_ObjectPos.z, -20.0f, 20.0f);
 
     }
 
