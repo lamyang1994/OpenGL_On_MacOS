@@ -25,8 +25,8 @@ cd Debug
 
 menu:
 
-![Menu](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/Menu.jpg)
+![Menu](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/Menu.jpg =480x360)
 
 test of lights:
 
-![Lights](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/TestLights.jpg)
+![Lights](https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/TestLights.jpg =480x360)
