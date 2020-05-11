@@ -23,4 +23,4 @@ cd Debug
 
 - Go, Select the Modules
 
-<image height=720 width=960 src="https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/demo.gif"\>
+<image height=720 width=960 src="https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/demo.gif">
