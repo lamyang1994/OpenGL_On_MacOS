@@ -6,6 +6,19 @@
 
 namespace test{
 
+    struct Material {
+        glm::vec3 ambient;
+        glm::vec3 diffuse;
+        glm::vec3 specular;
+        float shininess;
+
+        Material()
+            : ambient(0.25f, 0.20725f, 0.20725f), diffuse(1.0f, 0.829f, 0.829f), specular(0.296648f, 0.296648f, 0.296648f), shininess(0.088f * 128.0f)
+        {
+        }
+
+    };
+
     class TestLight : public Test
     {
     private:
@@ -17,7 +30,8 @@ namespace test{
         std::unique_ptr<Renderer> m_Renderer;
 
         glm::vec3 m_ObjectPos, m_LightPos, m_CameraPos;
-        glm::vec3 m_ObjectColor, m_LightColor;
+        glm::vec3 m_LightColor;
+        Material m_Material;
 
         glm::mat4 m_Proj, m_View;
 

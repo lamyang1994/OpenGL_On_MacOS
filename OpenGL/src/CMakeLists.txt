@@ -1,5 +1,5 @@
 # CMake 最低版本号要求
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.16)
 
 # 并将名称保存到 DIR_SRCS 变量
 aux_source_directory(. CUR_ALL_SRCS)
