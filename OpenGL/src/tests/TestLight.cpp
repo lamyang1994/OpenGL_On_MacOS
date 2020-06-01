@@ -9,78 +9,78 @@ namespace test{
         :m_ObjectPos(3.0f, 3.0f, 0.0f), m_LightPos(0.0f, 0.0f, 0.0f), m_CameraPos(0.0f, 0.0f, 1.0f), m_LightColor(1.0f, 1.0f, 1.0f),
          m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)), m_View(glm::mat4(1.0f)), m_CameraAngle(0.0f)
     {
-        float positions[] = {
-             -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-              0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-              0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  0.0f,
-             -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-
-             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-              0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-              0.5f,  0.5f, -0.5f,  0.0f,  0.0f,  0.0f,
-             -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f
-        };
-
-        unsigned int indices[] = {
-            0, 1, 2,    0, 3, 2,
-            1, 5, 6,    1, 2, 6,
-            5, 4, 7,    5, 6, 7,
-            7, 3, 0,    7, 4, 0,
-            3, 2, 6,    3, 7, 6,
-            4, 5, 1,    4, 0, 1
-        };
-
         // float positions[] = {
         //      -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
-        //       0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        //       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        //      -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-
-        //       0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        //      -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        //      -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        //       0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-
-        //      -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        //       0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        //       0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-        //      -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-
-        //       0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        //      -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        //      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-        //       0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-
         //       0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-        //       0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        //       0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        //       0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        //       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  0.0f,
+        //      -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
 
-        //      -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        //      -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        //      -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        //      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        //       0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        //       0.5f,  0.5f, -0.5f,  0.0f,  0.0f,  0.0f,
         //      -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f
         // };
 
         // unsigned int indices[] = {
-        //     0, 1, 2,
-        //     0, 3, 2,
-
-        //     4, 5, 6,
-        //     4, 7, 6,
-
-        //     8, 9, 10,
-        //     8, 11, 10,
-
-        //     12, 13, 14,
-        //     12, 15, 14,
-
-        //     16, 17, 18,
-        //     16, 19, 18,
-
-        //     20, 21, 22,
-        //     20, 23, 22
+        //     0, 1, 2,    0, 3, 2,
+        //     1, 5, 6,    1, 2, 6,
+        //     5, 4, 7,    5, 6, 7,
+        //     7, 3, 0,    7, 4, 0,
+        //     3, 2, 6,    3, 7, 6,
+        //     4, 5, 1,    4, 0, 1
         // };
+
+        float positions[] = {
+             -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
+              0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 0.0f,
+              0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f,
+             -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 1.0f,
+
+              0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 0.0f, 
+             -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 0.0f,
+             -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f,
+              0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 0.0f, 1.0f,
+
+             -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 0.0f,
+              0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 0.0f,
+              0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f,
+             -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 0.0f, 1.0f,
+
+              0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 0.0f,
+             -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 0.0f,
+             -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f,
+              0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 0.0f, 1.0f,
+
+              0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+              0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+              0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+              0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 0.0f, 1.0f,
+
+             -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 0.0f,
+             -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 0.0f,
+             -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f,
+             -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 0.0f, 1.0f
+        };
+
+        unsigned int indices[] = {
+            0, 1, 2,
+            0, 3, 2,
+
+            4, 5, 6,
+            4, 7, 6,
+
+            8, 9, 10,
+            8, 11, 10,
+
+            12, 13, 14,
+            12, 15, 14,
+
+            16, 17, 18,
+            16, 19, 18,
+
+            20, 21, 22,
+            20, 23, 22
+        };
 
         GLCall(glEnable(GL_DEPTH_TEST));
 
@@ -88,6 +88,7 @@ namespace test{
         VertexBufferLayout layout;
         layout.Push<float>(3);
         layout.Push<float>(3);
+        layout.Push<float>(2);
 
         m_VAO = std::make_unique<VertexArray>();
         m_VAO->AddBuffer(*m_VBO, layout);
@@ -96,6 +97,10 @@ namespace test{
 
         m_ObjectShader = std::make_unique<Shader>("../OpenGL/res/shader/ObjectShader.glsl");
         m_LightShader = std::make_unique<Shader>("../OpenGL/res/shader/LightShader.glsl");
+
+        m_Texture_0 = std::make_unique<Texture>("../OpenGL/res/textures/container.png");
+        m_Texture_1 = std::make_unique<Texture>("../OpenGL/res/textures/container_specular.png");
+        m_Texture_2 = std::make_unique<Texture>("../OpenGL/res/textures/matrix.jpg");
 
         m_Renderer = std::make_unique<Renderer>();
         GLCall(glProvokingVertex(GL_FIRST_VERTEX_CONVENTION));
@@ -145,14 +150,17 @@ namespace test{
             m_ObjectShader->SetUniform3fv("u_CameraPos", m_CameraPos);
 
             m_ObjectShader->SetUniform3fv("u_Light.position", m_LightPos);
-            m_ObjectShader->SetUniform3fv("u_Light.ambient",  m_LightColor);
-            m_ObjectShader->SetUniform3fv("u_Light.diffuse",  m_LightColor);
+            m_ObjectShader->SetUniform3fv("u_Light.ambient",  0.2f * m_LightColor);
+            m_ObjectShader->SetUniform3fv("u_Light.diffuse",  0.5f * m_LightColor);
             m_ObjectShader->SetUniform3fv("u_Light.specular", m_LightColor);
 
-            m_ObjectShader->SetUniform3fv("u_Material.ambient",  m_Material.ambient);
-            m_ObjectShader->SetUniform3fv("u_Material.diffuse",  m_Material.diffuse);
-            m_ObjectShader->SetUniform3fv("u_Material.specular", m_Material.specular);
-            m_ObjectShader->SetUniform1f("u_Material.shininess", m_Material.shininess);
+            m_Texture_0->Bind(0);
+            m_ObjectShader->SetUniform1i("u_Material.diffuse",  0);
+            m_Texture_1->Bind(1);
+            m_ObjectShader->SetUniform1i("u_Material.specular",  1);
+            m_Texture_2->Bind(2);
+            m_ObjectShader->SetUniform1i("u_Material.ambient",  2);
+            m_ObjectShader->SetUniform1f("u_Material.shininess", m_Shininess);
 
             m_Renderer->Draw(*m_VAO, *m_IBO, *m_ObjectShader);
 
@@ -161,13 +169,9 @@ namespace test{
 
     void TestLight::OnImGuiRender()
     {
-        ImGui::SliderFloat("Camera Angle", &m_CameraAngle,          0.0f,   360.0f);
-        ImGui::SliderFloat3("ObjectPos" ,  &m_ObjectPos.x,          -20.0f, 20.0f);
-        ImGui::SliderFloat3("LightColor",  &m_LightColor.x,         0.0f,   1.0f);
-        ImGui::SliderFloat3("ambient",     &m_Material.ambient.x,   0.0f,   1.0f);
-        ImGui::SliderFloat3("diffuse",     &m_Material.diffuse.x,   0.0f,   1.0f);
-        ImGui::SliderFloat3("specular",    &m_Material.specular.x,  0.0f,   1.0f);
-        ImGui::SliderFloat("specular",     &m_Material.shininess,   0.0f,   128.0f);
+        ImGui::SliderFloat("Camera Angle", &m_CameraAngle,    0.0f,   360.0f);
+        ImGui::SliderFloat3("ObjectPos" ,  &m_ObjectPos.x,    -20.0f, 20.0f);
+        ImGui::SliderFloat("shininess",    &m_Shininess,      0.0f,   128.0f);
 
     }
 
