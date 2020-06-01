@@ -21,6 +21,6 @@ cd Debug
 ./bin/App.o
 ```
 
-- Go, Select the Modules
+- Go, Select the Module
 
 <image height=720 width=960 src="https://github.com/lamyang1994/OpenGL_On_MacOS/blob/master/demo.gif">
