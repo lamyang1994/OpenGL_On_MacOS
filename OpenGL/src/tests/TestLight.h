@@ -1,10 +1,13 @@
+#pragma once
 #include "Test.h"
+#include "Camera.h"
 
 #include "vendor/glm/glm.hpp"
 #include "vendor/glm/gtc/matrix_transform.hpp"
 
 
 namespace test{
+    static void MouseMovement_Callback(GLFWwindow* window, double pos_x, double pos_y);
 
     class TestLight : public Test
     {
@@ -17,25 +20,34 @@ namespace test{
         std::unique_ptr<Renderer> m_Renderer;
         std::unique_ptr<Texture> m_Texture_0;
         std::unique_ptr<Texture> m_Texture_1;
-        std::unique_ptr<Texture> m_Texture_2;
+        // std::unique_ptr<Texture> m_Texture_2;
+        std::vector<glm::vec3> m_CubePositions;
 
-        glm::vec3 m_ObjectPos, m_LightPos, m_CameraPos;
+        //light
+        glm::vec4 m_LightVec;
         glm::vec3 m_LightColor;
-        float m_Shininess = 0.088f * 128.0f;
+        float m_Shininess, m_Constant, m_Linear, m_Quadratic;
 
-        glm::mat4 m_Proj, m_View;
+        //camera
+        std::unique_ptr<Camera> m_Camera;
+        bool m_FlashLight, m_FirstMouse;
+        float m_DeltaTime, m_MousePosX, m_MousePosY;
 
-        float m_CameraAngle;
-        
+        glm::mat4 m_Proj;
+        GLFWwindow* m_Window;
 
     public:
-        TestLight();
+        TestLight(GLFWwindow*);
         ~TestLight() override;
 
         void OnUpdate(float deltaTime) override;
         void OnRender() override;
         void OnImGuiRender() override;
 
+        friend void MouseMovement_Callback(GLFWwindow* window, double pos_x, double pos_y);
+
+    private:
+        void ProcessInput();
     };
 
 }

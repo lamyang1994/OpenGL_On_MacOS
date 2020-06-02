@@ -9,8 +9,6 @@
 #include <stdio.h>
 
 namespace test {
-    void MouseMovement_Callback(GLFWwindow* window, double pos_x, double pos_y);
-    void MouseScroll_Callback(GLFWwindow* window, double offset_x, double offset_y);
 
     TestCamera::TestCamera(GLFWwindow* window)
         :m_Model(glm::mat4(1.0f)), m_View(glm::mat4(1.0f)), m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)), 

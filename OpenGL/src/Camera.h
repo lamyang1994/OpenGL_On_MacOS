@@ -42,6 +42,9 @@ public:
         return glm::radians(m_Zoom);
     }
 
+    inline glm::vec3 GetPos() const { return m_Position; }
+    inline glm::vec3 GetFront() const { return m_Front; }
+
 private:
     void updateCameraVectors();
 

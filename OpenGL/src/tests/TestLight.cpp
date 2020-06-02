@@ -5,30 +5,14 @@
 #include "vendor/imgui/imgui_impl_glfw.h"
 
 namespace test{
-    TestLight::TestLight()
-        :m_ObjectPos(3.0f, 3.0f, 0.0f), m_LightPos(0.0f, 0.0f, 0.0f), m_CameraPos(0.0f, 0.0f, 1.0f), m_LightColor(1.0f, 1.0f, 1.0f),
-         m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)), m_View(glm::mat4(1.0f)), m_CameraAngle(0.0f)
+
+    TestLight::TestLight(GLFWwindow* window)
+        :m_LightVec(-0.2f, -1.0f, -0.3f, 1.0f), m_LightColor(1.0f, 1.0f, 1.0f),
+         m_Shininess(0.088f * 128.0f), m_Constant(1.0f), m_Linear(0.045f), m_Quadratic(0.0075f),
+         m_FlashLight(false), m_FirstMouse(false), m_DeltaTime(0.0f), m_MousePosX(480.0f), m_MousePosY(360.0f),
+         m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)),
+         m_Window(window)
     {
-        // float positions[] = {
-        //      -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 
-        //       0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-        //       0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  0.0f,
-        //      -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-
-        //      -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-        //       0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        //       0.5f,  0.5f, -0.5f,  0.0f,  0.0f,  0.0f,
-        //      -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f
-        // };
-
-        // unsigned int indices[] = {
-        //     0, 1, 2,    0, 3, 2,
-        //     1, 5, 6,    1, 2, 6,
-        //     5, 4, 7,    5, 6, 7,
-        //     7, 3, 0,    7, 4, 0,
-        //     3, 2, 6,    3, 7, 6,
-        //     4, 5, 1,    4, 0, 1
-        // };
 
         float positions[] = {
              -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 0.0f, 0.0f,
@@ -63,24 +47,31 @@ namespace test{
         };
 
         unsigned int indices[] = {
-            0, 1, 2,
-            0, 3, 2,
-
-            4, 5, 6,
-            4, 7, 6,
-
-            8, 9, 10,
-            8, 11, 10,
-
-            12, 13, 14,
-            12, 15, 14,
-
-            16, 17, 18,
-            16, 19, 18,
-
-            20, 21, 22,
-            20, 23, 22
+            0,  1,  2,    0,  3,  2,
+            4,  5,  6,    4,  7,  6,
+            8,  9,  10,   8,  11, 10,
+            12, 13, 14,   12, 15, 14,
+            16, 17, 18,   16, 19, 18,
+            20, 21, 22,   20, 23, 22
         };
+
+        m_CubePositions = std::vector<glm::vec3>{
+                glm::vec3(-2.0f, -2.0f,  -3.0f), 
+                glm::vec3(-4.0f,  0.0f,  -4.5f), 
+                glm::vec3(-2.0f,  2.0f,  -6.0f),  
+                glm::vec3( 0.0f,  4.0f,  -7.5f),  
+                glm::vec3( 2.0f,  2.0f,  -9.0f),  
+                glm::vec3( 4.0f,  0.0f, -10.5f),  
+                glm::vec3( 2.0f, -2.0f, -12.0f),  
+                glm::vec3( 0.0f, -4.0f, -13.5f), 
+                glm::vec3(-2.0f, -2.0f, -15.0f), 
+                glm::vec3(-4.0f,  0.0f, -16.5f),
+                glm::vec3(-2.0f,  2.0f, -18.0f),
+                glm::vec3( 0.0f,  4.0f, -19.5f),
+                glm::vec3( 2.0f,  2.0f, -21.0f),
+                glm::vec3( 0.0f,  0.0f, -23.0f)
+        };
+
 
         GLCall(glEnable(GL_DEPTH_TEST));
 
@@ -100,10 +91,12 @@ namespace test{
 
         m_Texture_0 = std::make_unique<Texture>("../OpenGL/res/textures/container.png");
         m_Texture_1 = std::make_unique<Texture>("../OpenGL/res/textures/container_specular.png");
-        m_Texture_2 = std::make_unique<Texture>("../OpenGL/res/textures/matrix.jpg");
+        // m_Texture_2 = std::make_unique<Texture>("../OpenGL/res/textures/matrix.jpg");
 
         m_Renderer = std::make_unique<Renderer>();
-        GLCall(glProvokingVertex(GL_FIRST_VERTEX_CONVENTION));
+        // GLCall(glProvokingVertex(GL_FIRST_VERTEX_CONVENTION));
+        m_Camera = std::make_unique<Camera>();
+        GLCall(glfwSetWindowUserPointer(m_Window, this));
     }
 
     TestLight::~TestLight()
@@ -113,66 +106,124 @@ namespace test{
 
     void TestLight::OnUpdate(float deltaTime)
     {
+        m_DeltaTime = deltaTime;
     }
 
     void TestLight::OnRender()
     {
         m_Renderer->Clear();
-
-        // camera 
-        {
-            float camX = glm::sin(glm::radians(m_CameraAngle)) * 10.0f;
-            float camZ = glm::cos(glm::radians(m_CameraAngle)) * 10.0f;
-            m_CameraPos = glm::vec3(camX, 0.0, camZ);
-            m_View = glm::lookAt(m_CameraPos, m_LightPos, glm::vec3(0.0f, 1.0f, 0.0f)); 
-        }
-
+        ProcessInput();
         // draw light
+        if (m_LightVec.w == 1.0f && !m_FlashLight)
         {
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), m_LightPos);
+            glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_LightVec));
             model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.662f, 0.2f, 0.7222f));
+            model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
             m_LightShader->Bind();
-            m_LightShader->SetUniformMat4f("u_MVP", m_Proj * m_View * model);
+            m_LightShader->SetUniformMat4f("u_MVP", m_Proj * m_Camera->GetViewMatrix() * model);
             m_LightShader->SetUniform3fv("u_LightColor", m_LightColor);
             m_Renderer->Draw(*m_VAO, *m_IBO, *m_LightShader);
         }
-        // draw object
-        {
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), m_ObjectPos);
-            model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.662f, 0.2f, 0.7222f));
 
-            m_ObjectShader->Bind();
-            m_ObjectShader->SetUniformMat4f("u_Proj", m_Proj);
-            m_ObjectShader->SetUniformMat4f("u_View", m_View);
+        m_ObjectShader->Bind();
+        m_ObjectShader->SetUniformMat4f("u_Proj", m_Proj);
+        m_ObjectShader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix());
+        m_ObjectShader->SetUniform3fv("u_Light.lightColor", m_LightColor);
+        m_ObjectShader->SetUniform1f("u_Light.constant", m_Constant);
+        m_ObjectShader->SetUniform1f("u_Light.linear", m_Linear);
+        m_ObjectShader->SetUniform1f("u_Light.quadratic", m_Quadratic);
+        m_ObjectShader->SetUniform3fv("u_Light.spotDir", m_Camera->GetFront());
+        m_ObjectShader->SetUniform1f("u_Light.cutOff", glm::cos(glm::radians(12.5f)));
+        m_ObjectShader->SetUniform1f("u_Light.outerCutOff", glm::cos(glm::radians(17.5f)));
+
+        if (m_FlashLight)
+            m_ObjectShader->SetUniform4fv("u_Light.lightVector", glm::vec4(m_Camera->GetPos(), 1.0f));
+        else
+            m_ObjectShader->SetUniform4fv("u_Light.lightVector", m_LightVec);
+
+        //texture
+        m_Texture_0->Bind(0);
+        m_ObjectShader->SetUniform1i("u_Material.diffuse",  0);
+        m_Texture_1->Bind(1);
+        m_ObjectShader->SetUniform1i("u_Material.specular",  1);
+        // m_Texture_2->Bind(2);
+        // m_ObjectShader->SetUniform1i("u_Material.ambient",  2);
+        m_ObjectShader->SetUniform1f("u_Material.shininess", m_Shininess);
+        m_ObjectShader->SetUniform1i("u_FlashLight", (int)m_FlashLight);
+        
+        //draw
+        for (int i = 0; i < 14; i++)
+        {
+            glm::mat4 model = glm::mat4(1.0f);
+            model = glm::translate(model, m_CubePositions[i]);
+            model = glm::rotate(model, glm::radians(i*20.0f), glm::vec3(0.662f, 0.2f, 0.7222f));
+
             m_ObjectShader->SetUniformMat4f("u_Model", model);
             m_ObjectShader->SetUniformMat3f("u_NormalMatrix", glm::mat3(glm::transpose(glm::inverse(model))));
 
-            m_ObjectShader->SetUniform3fv("u_CameraPos", m_CameraPos);
-
-            m_ObjectShader->SetUniform3fv("u_Light.position", m_LightPos);
-            m_ObjectShader->SetUniform3fv("u_Light.ambient",  0.2f * m_LightColor);
-            m_ObjectShader->SetUniform3fv("u_Light.diffuse",  0.5f * m_LightColor);
-            m_ObjectShader->SetUniform3fv("u_Light.specular", m_LightColor);
-
-            m_Texture_0->Bind(0);
-            m_ObjectShader->SetUniform1i("u_Material.diffuse",  0);
-            m_Texture_1->Bind(1);
-            m_ObjectShader->SetUniform1i("u_Material.specular",  1);
-            m_Texture_2->Bind(2);
-            m_ObjectShader->SetUniform1i("u_Material.ambient",  2);
-            m_ObjectShader->SetUniform1f("u_Material.shininess", m_Shininess);
-
-            m_Renderer->Draw(*m_VAO, *m_IBO, *m_ObjectShader);
-
+            m_Renderer->Draw(*m_VAO, *m_IBO, *m_ObjectShader); 
         }
     }
 
     void TestLight::OnImGuiRender()
     {
-        ImGui::SliderFloat("Camera Angle", &m_CameraAngle,    0.0f,   360.0f);
-        ImGui::SliderFloat3("ObjectPos" ,  &m_ObjectPos.x,    -20.0f, 20.0f);
-        ImGui::SliderFloat("shininess",    &m_Shininess,      0.0f,   128.0f);
+        ImGui::Text("Press Enter to Move, ESC to Stop!");
 
+        ImGui::SliderFloat3("LightVector",   &m_LightVec.x,   -10.0f, 10.0f);
+        ImGui::SliderFloat("LightLinear",    &m_Linear,       0.0f,   0.1f);
+        ImGui::SliderFloat("LightQuadratic", &m_Quadratic,    0.0f,   0.1f);
+
+        ImGui::Checkbox("Flash Light", &m_FlashLight);
+
+        if (ImGui::Button("Change Light"))
+        {
+            if (m_LightVec.w == 0.0f)
+                m_LightVec.w = 1.0f;
+            else if (m_LightVec.w == 1.0f)
+                m_LightVec.w = 0.0f;
+        }
+
+    }
+    
+    void TestLight::ProcessInput()
+    {
+        if (glfwGetKey(m_Window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        {
+            GLCall(glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_NORMAL));
+            GLCall(glfwSetCursorPosCallback(m_Window, NULL));
+        }
+
+        if (glfwGetKey(m_Window, GLFW_KEY_ENTER) == GLFW_PRESS)
+        {
+            GLCall(glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED));
+            GLCall(glfwSetCursorPosCallback(m_Window, MouseMovement_Callback));
+        }
+
+        if (glfwGetKey(m_Window, GLFW_KEY_W) == GLFW_PRESS)
+            m_Camera->ProcessKeyboard(CameraMovement::FORWARD, m_DeltaTime);
+        if (glfwGetKey(m_Window, GLFW_KEY_S) == GLFW_PRESS)
+            m_Camera->ProcessKeyboard(CameraMovement::BACKWARD, m_DeltaTime);
+        if (glfwGetKey(m_Window, GLFW_KEY_A) == GLFW_PRESS)
+            m_Camera->ProcessKeyboard(CameraMovement::LEFT, m_DeltaTime);
+        if (glfwGetKey(m_Window, GLFW_KEY_D) == GLFW_PRESS)
+            m_Camera->ProcessKeyboard(CameraMovement::RIGHT, m_DeltaTime);
+    }
+
+    void MouseMovement_Callback(GLFWwindow* window, double pos_x, double pos_y)
+    {
+        TestLight* obj = (TestLight*)glfwGetWindowUserPointer(window);
+        if(obj->m_FirstMouse)
+        {
+            obj->m_MousePosX  = pos_x;
+            obj->m_MousePosY  = pos_y;
+            obj->m_FirstMouse = false;
+        }
+        double offset_x = pos_x - obj->m_MousePosX;
+        double offset_y = obj->m_MousePosY - pos_y;
+        obj->m_MousePosX = pos_x;
+        obj->m_MousePosY = pos_y;
+
+        obj->m_Camera->ProcessMouseMovement(offset_x, offset_y);
     }
 
 };

@@ -27,6 +27,7 @@ public:
 
     //Setting Uniforms
     void SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
+    void SetUniform4fv(const std::string& name, glm::vec4 vec);
     void SetUniform3fv(const std::string& name, glm::vec3 vec);
     void SetUniform1i(const std::string& name, int value);
     void SetUniform1f(const std::string& name, float value);

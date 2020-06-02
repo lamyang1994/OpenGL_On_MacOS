@@ -42,6 +42,7 @@ void Camera::ProcessMouseMovement(float offset_x, float offset_y, GLboolean cons
     }
     updateCameraVectors();
 }
+
 void Camera::ProcessMouseScroll(float offset)
 {
     if (m_Zoom >= 1.0f && m_Zoom <= 45.0f)

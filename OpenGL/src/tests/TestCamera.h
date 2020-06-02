@@ -4,7 +4,9 @@
 #include "Camera.h"
 
 namespace test {
- 
+    static void MouseMovement_Callback(GLFWwindow* window, double pos_x, double pos_y);
+    static void MouseScroll_Callback(GLFWwindow* window, double offset_x, double offset_y);
+
     class TestCamera : public Test
     {
     private:
