@@ -4,7 +4,6 @@
 #include "vendor/glm/glm.hpp"
 #include "vendor/glm/gtc/matrix_transform.hpp"
 
-
 enum CameraMovement{
     FORWARD,
     BACKWARD,
@@ -21,7 +20,7 @@ const float ZOOM        =  45.0f;
 
 class Camera{    
 private:
-    glm::vec3 m_Position, m_Front, m_Up, m_Right;
+    glm::vec3 m_Position, m_Front, m_Up, m_Right, m_WordUp;
     float m_Yaw, m_Pitch;
     float m_Speed, m_Sensitivity, m_Zoom;
 

@@ -1,13 +1,15 @@
 #include "Camera.h"
+#include <iostream>
 
 Camera::Camera(glm::vec3 pos, glm::vec3 up, float yaw, float pitch, float zoom)
     :m_Front(glm::vec3(0.0f, 0.0f, -1.0f)), m_Speed(SPEED), m_Sensitivity(SENSITIVITY) 
 {
     m_Position = pos; 
-    m_Up = up;
+    m_WordUp = up;
     m_Yaw = yaw;
     m_Pitch = pitch; 
     m_Zoom = zoom;
+    // m_Right and m_Up is initialized here 
     Camera::updateCameraVectors();
 }
 
@@ -33,6 +35,7 @@ void Camera::ProcessMouseMovement(float offset_x, float offset_y, GLboolean cons
     m_Yaw  += offset_x * m_Sensitivity;
     m_Pitch += offset_y * m_Sensitivity;
     
+    std::cout << constrainPitch << std::endl;
     if (constrainPitch)
     {
         if (m_Pitch > 89.0f)
@@ -61,6 +64,6 @@ void Camera::updateCameraVectors()
     front.z = cos(glm::radians(m_Pitch)) * glm::sin(glm::radians(m_Yaw));
 
     m_Front = glm::normalize(front);
-    m_Right = glm::normalize(glm::cross(m_Front, m_Up));
+    m_Right = glm::normalize(glm::cross(m_Front, m_WordUp));
     m_Up    = glm::normalize(glm::cross(m_Right, m_Front));
 }

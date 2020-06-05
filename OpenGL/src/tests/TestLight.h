@@ -22,15 +22,17 @@ namespace test{
         std::unique_ptr<Texture> m_Texture_1;
         // std::unique_ptr<Texture> m_Texture_2;
         std::vector<glm::vec3> m_CubePositions;
+        std::vector<glm::vec3> m_LightPositions;
 
         //light
-        glm::vec4 m_LightVec;
-        glm::vec3 m_LightColor;
-        float m_Shininess, m_Constant, m_Linear, m_Quadratic;
+        glm::vec3 m_LightDir, m_LightColor;
+        float m_Shininess, m_Linear, m_Quadratic;
+        bool m_isDirLight, m_isSpotLight;
+        int m_numPointLight;
 
         //camera
         std::unique_ptr<Camera> m_Camera;
-        bool m_FlashLight, m_FirstMouse;
+        bool m_FirstMouse;
         float m_DeltaTime, m_MousePosX, m_MousePosY;
 
         glm::mat4 m_Proj;

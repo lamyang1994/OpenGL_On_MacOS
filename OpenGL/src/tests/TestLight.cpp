@@ -7,9 +7,10 @@
 namespace test{
 
     TestLight::TestLight(GLFWwindow* window)
-        :m_LightVec(-0.2f, -1.0f, -0.3f, 1.0f), m_LightColor(1.0f, 1.0f, 1.0f),
-         m_Shininess(0.088f * 128.0f), m_Constant(1.0f), m_Linear(0.045f), m_Quadratic(0.0075f),
-         m_FlashLight(false), m_FirstMouse(false), m_DeltaTime(0.0f), m_MousePosX(480.0f), m_MousePosY(360.0f),
+        :m_LightDir(-1.0f, -1.0f, 0.0f), m_LightColor(1.0f, 1.0f, 1.0f),
+         m_Shininess(0.088f * 128.0f), m_Linear(0.045f), m_Quadratic(0.0075f),
+         m_isDirLight(1), m_isSpotLight(1), m_numPointLight(4),
+         m_FirstMouse(true), m_DeltaTime(0.0f), m_MousePosX(480.0f), m_MousePosY(360.0f),
          m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)),
          m_Window(window)
     {
@@ -72,6 +73,13 @@ namespace test{
                 glm::vec3( 0.0f,  0.0f, -23.0f)
         };
 
+        m_LightPositions = std::vector<glm::vec3>{
+                glm::vec3( 0.0f,  0.0f,  -0.0f), 
+                glm::vec3( 3.0f,  3.0f,  -8.0f), 
+                glm::vec3( -3.0f, 3.0f,  -16.0f), 
+                glm::vec3( 4.0f,  4.0f,  -24.0f)  
+        };
+
 
         GLCall(glEnable(GL_DEPTH_TEST));
 
@@ -114,9 +122,10 @@ namespace test{
         m_Renderer->Clear();
         ProcessInput();
         // draw light
-        if (m_LightVec.w == 1.0f && !m_FlashLight)
+        for (int i = 0; i < m_numPointLight; i++)
         {
-            glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(m_LightVec));
+
+            glm::mat4 model = glm::translate(glm::mat4(1.0f), m_LightPositions[i]);
             model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.662f, 0.2f, 0.7222f));
             model = glm::scale(model, glm::vec3(0.4f, 0.4f, 0.4f));
             m_LightShader->Bind();
@@ -128,18 +137,6 @@ namespace test{
         m_ObjectShader->Bind();
         m_ObjectShader->SetUniformMat4f("u_Proj", m_Proj);
         m_ObjectShader->SetUniformMat4f("u_View", m_Camera->GetViewMatrix());
-        m_ObjectShader->SetUniform3fv("u_Light.lightColor", m_LightColor);
-        m_ObjectShader->SetUniform1f("u_Light.constant", m_Constant);
-        m_ObjectShader->SetUniform1f("u_Light.linear", m_Linear);
-        m_ObjectShader->SetUniform1f("u_Light.quadratic", m_Quadratic);
-        m_ObjectShader->SetUniform3fv("u_Light.spotDir", m_Camera->GetFront());
-        m_ObjectShader->SetUniform1f("u_Light.cutOff", glm::cos(glm::radians(12.5f)));
-        m_ObjectShader->SetUniform1f("u_Light.outerCutOff", glm::cos(glm::radians(17.5f)));
-
-        if (m_FlashLight)
-            m_ObjectShader->SetUniform4fv("u_Light.lightVector", glm::vec4(m_Camera->GetPos(), 1.0f));
-        else
-            m_ObjectShader->SetUniform4fv("u_Light.lightVector", m_LightVec);
 
         //texture
         m_Texture_0->Bind(0);
@@ -149,7 +146,46 @@ namespace test{
         // m_Texture_2->Bind(2);
         // m_ObjectShader->SetUniform1i("u_Material.ambient",  2);
         m_ObjectShader->SetUniform1f("u_Material.shininess", m_Shininess);
-        m_ObjectShader->SetUniform1i("u_FlashLight", (int)m_FlashLight);
+
+        //Direction Light
+        m_ObjectShader->SetUniform3fv("u_DirLight.lightDirection", m_LightDir);
+        m_ObjectShader->SetUniform3fv("u_DirLight.lightColor", m_LightColor);
+
+        //Spot Light
+        m_ObjectShader->SetUniform3fv("u_SpotLight.lightPosition", m_Camera->GetPos());
+        m_ObjectShader->SetUniform3fv("u_SpotLight.lightColor", m_LightColor);
+        m_ObjectShader->SetUniform1f("u_SpotLight.constant", 1.0f);
+        m_ObjectShader->SetUniform1f("u_SpotLight.linear", 0.5 * m_Linear);
+        m_ObjectShader->SetUniform1f("u_SpotLight.quadratic", 0.5 * m_Quadratic);
+        m_ObjectShader->SetUniform3fv("u_SpotLight.spotDir", m_Camera->GetFront());
+        m_ObjectShader->SetUniform1f("u_SpotLight.cutOff", glm::cos(glm::radians(10.0f)));
+        m_ObjectShader->SetUniform1f("u_SpotLight.outerCutOff", glm::cos(glm::radians(15.0f)));
+
+        //Point Lights
+        for (int i = 0; i < 4; i++)
+        {
+            char u_name[100];
+            std::sprintf(u_name, "u_PointLights[%d].lightPosition", i);
+            m_ObjectShader->SetUniform3fv(u_name, m_LightPositions[i]);
+
+            std::sprintf(u_name, "u_PointLights[%d].lightColor", i);
+            m_ObjectShader->SetUniform3fv(u_name, m_LightColor);
+
+            std::sprintf(u_name, "u_PointLights[%d].constant", i);
+            m_ObjectShader->SetUniform1f(u_name, 1.0f);
+
+            std::sprintf(u_name, "u_PointLights[%d].linear", i);
+            m_ObjectShader->SetUniform1f(u_name, m_Linear);
+
+            std::sprintf(u_name, "u_PointLights[%d].quadratic", i);
+            m_ObjectShader->SetUniform1f(u_name, m_Quadratic);
+        }
+
+        //control uniform
+        m_ObjectShader->SetUniform3fv("u_CameraPos", m_Camera->GetPos());
+        m_ObjectShader->SetUniform1i("u_isDirLight", (int)m_isDirLight);
+        m_ObjectShader->SetUniform1i("u_isSpotLight", (int)m_isSpotLight);
+        m_ObjectShader->SetUniform1i("u_numPointLight", m_numPointLight);
         
         //draw
         for (int i = 0; i < 14; i++)
@@ -169,20 +205,14 @@ namespace test{
     {
         ImGui::Text("Press Enter to Move, ESC to Stop!");
 
-        ImGui::SliderFloat3("LightVector",   &m_LightVec.x,   -10.0f, 10.0f);
+        ImGui::SliderFloat3("LightDirection",   &m_LightDir.x,   -1.0f, 1.0f);
+        ImGui::SliderFloat("Shininess",    &m_Shininess,      0.0f,   128.0f);
         ImGui::SliderFloat("LightLinear",    &m_Linear,       0.0f,   0.1f);
         ImGui::SliderFloat("LightQuadratic", &m_Quadratic,    0.0f,   0.1f);
 
-        ImGui::Checkbox("Flash Light", &m_FlashLight);
-
-        if (ImGui::Button("Change Light"))
-        {
-            if (m_LightVec.w == 0.0f)
-                m_LightVec.w = 1.0f;
-            else if (m_LightVec.w == 1.0f)
-                m_LightVec.w = 0.0f;
-        }
-
+        ImGui::Checkbox("Direction Light", &m_isDirLight);
+        ImGui::Checkbox("Spot Light", &m_isSpotLight);
+        ImGui::SliderInt("Point Lights", &m_numPointLight, 0, 4);
     }
     
     void TestLight::ProcessInput()
