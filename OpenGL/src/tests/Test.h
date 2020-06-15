@@ -11,6 +11,7 @@
 #include "VertexArray.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "Renderer.h"
 
 #include <GLFW/glfw3.h>
 

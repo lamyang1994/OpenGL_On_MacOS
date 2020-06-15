@@ -22,12 +22,16 @@ SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/Debug/lib)
 INCLUDE_DIRECTORIES(
     ${PROJECT_SOURCE_DIR}/Dependencies/glfw/3.3.2/include
     ${PROJECT_SOURCE_DIR}/Dependencies/glew/2.1.0_1/include
+    ${PROJECT_SOURCE_DIR}/Dependencies/assimp/include
     ${PROJECT_SOURCE_DIR}/OpenGL/src
     )
 # 链接库搜索路径
 LINK_DIRECTORIES(
+    /usr/local/lib
     ${PROJECT_SOURCE_DIR}/Dependencies/glfw/3.3.2/lib-macos
     ${PROJECT_SOURCE_DIR}/Dependencies/glew/2.1.0_1/lib
+    ${PROJECT_SOURCE_DIR}/Dependencies/assimp/lib
+    ${PROJECT_SOURCE_DIR}/Debug/lib
     )
 
 # 添加子目录

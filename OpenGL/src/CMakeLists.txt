@@ -10,4 +10,4 @@ aux_source_directory(./tests/ TEST_SRCS)
 add_executable(App.o ${CUR_ALL_SRCS} ${IMGUI_SRCS} ${TEST_SRCS})
 
 # 添加链接库
-target_link_libraries(App.o glfw3 GLEW)
+target_link_libraries(App.o glfw3 GLEW assimp)
