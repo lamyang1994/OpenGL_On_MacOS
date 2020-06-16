@@ -24,7 +24,7 @@ Texture::Texture(const std::string &filepath, bool isMipmap)
         else if (m_BPP == 4)
             format = GL_RGBA;
 
-        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_LocalBuffer));
+        GLCall(glTexImage2D(GL_TEXTURE_2D, 0, format, m_Width, m_Height, 0, format, GL_UNSIGNED_BYTE, m_LocalBuffer));
         if (isMipmap)
         {
             GLCall(glGenerateMipmap(GL_TEXTURE_2D));

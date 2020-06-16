@@ -59,6 +59,7 @@ void main()
     vec3 norm = normalize(v_Normal);
 
     OutputColor += calDirLight(u_DirLight, norm, viewDir);
+    // OutputColor = vec3(texture(u_Material.texture_diffuse0, v_TexCoord));
     color = vec4(OutputColor, 1.0f);
 }
 
@@ -71,7 +72,7 @@ vec3 calDirLight(DirLight light, vec3 normal, vec3 viewDir)
 
     // diffuse
     float diff = max(dot(-normDir, normal), 0.0f);
-    vec3 diffuse = (0.7 * light.lightColor) * diff * vecTexture;
+    vec3 diffuse = (0.8 * light.lightColor) * diff * vecTexture;
 
     // specular
     vec3 reflectDir = reflect(normDir, normal);

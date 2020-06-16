@@ -28,6 +28,10 @@ void Mesh::setupMesh()
     layout.Push<float>(2);
 
     m_VAO->AddBuffer(*m_VBO, layout);
+
+    m_VAO->unBind();
+    m_VBO->unBind();
+
 }
 
 void Mesh::Draw(Renderer& renderer, Shader& shader) const 
@@ -152,10 +156,10 @@ std::vector<TextureInfo> Model::loadMaterialTextures(aiMaterial* material, aiTex
     {
         aiString tpath;
         material->GetTexture(type, i, &tpath);
-        std::cout << tpath.C_Str() << std::endl;
 
         if (m_TextureInfoCache.find(tpath.C_Str()) == m_TextureInfoCache.end())
         {
+            std::cout << tpath.C_Str() << std::endl;
             std::string fullpath;
             fullpath = m_Directory + "/" +tpath.C_Str();
             m_TextureInfoCache[tpath.C_Str()] = { std::make_shared<Texture>(fullpath), typeName };

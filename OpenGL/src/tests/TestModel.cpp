@@ -11,7 +11,7 @@ namespace test {
           m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)),
           m_Position(glm::vec3(0.0f, -10.0f, -20.0f)), m_Window(window)
     {
-        m_Model = std::make_unique<Model>("../OpenGL/res/models/nanosuit/nanosuit.obj");
+        m_Model = std::make_unique<Model>("../OpenGL/res/models/backpack/backpack.obj");
         m_Camera = std::make_unique<Camera>();
 
         m_Shader = std::make_shared<Shader>("../OpenGL/res/shader/ModelShader.glsl");
