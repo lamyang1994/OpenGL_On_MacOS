@@ -9,7 +9,7 @@ namespace test {
     TestModel::TestModel(GLFWwindow* window)
         : m_FirstMouse(true), m_DeltaTime(0.0f), m_MousePosX(480.0f), m_MousePosY(360.0f), m_Angle(0.0f),
           m_Proj(glm::perspective(glm::radians(45.0f), 960.0f / 720.0f, 0.1f, 100.0f)),
-          m_Position(glm::vec3(0.0f, -10.0f, -20.0f)), m_Window(window)
+          m_Position(glm::vec3(0.0f, -0.0f, -10.0f)), m_Window(window)
     {
         m_Model = std::make_unique<Model>("../OpenGL/res/models/backpack/backpack.obj");
         m_Camera = std::make_unique<Camera>();
